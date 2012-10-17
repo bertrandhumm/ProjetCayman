@@ -1,0 +1,39 @@
+<! DOCTYPE html>
+<head>
+	<title>Share to your homies</title>
+	<link rel="stylesheet" type="text/css" href="popup.css" />
+	<script type="text/javascript" src="jquery-1.8.2.min.js"></script>
+	<script src="/websocket.js"></script>
+	<script type="text/javascript" src="popup.js"></script>
+	
+</head>
+<body>
+	<div id="post">
+    	<textarea placeholder="Exprime toi bordel!" id="comment"></textarea>
+        <input type="image" id="send_post" src="images/empty.png" class="disabled" disabled="disabled"/>
+		<!--<button type="button" id="send_post">Envoyer cette page</button>-->
+	</div>
+    
+    
+	<div id="login">
+    <h1>C'est ta premi&egrave;re fois ?</h1>
+    <span>Rassure toi, dans une minute tu es dedans!<br />Quel sera ton pseudo?</span>
+    <form>
+        <fieldset>
+            <input type="text" name="user" id="user" placeholder="Identifiant" />
+            <select>
+                <option value="none">Retrieving list</option>
+            </select>
+        </fieldset>
+        <input type="image" id="login_button" src="images/empty.png" />
+        <div style="clear:both"></div>
+    </form>
+	</div>
+    
+   
+	<div id="liens">
+		<ul>
+			<li class="loading"><h3>Connecting with Houston, Texas</h3></li>
+		</ul>
+	</div>
+</body>

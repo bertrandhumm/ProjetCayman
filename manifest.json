@@ -1,0 +1,32 @@
+{
+  // Required
+  "name": "ProjetCayman",
+  "version": "0.2",
+  "manifest_version": 2,
+
+  // Recommended
+  "description": "Partage ton bonheur",
+  "icons": {"16"	: "images/icon_16.png",
+           	"48"	: "images/icon_48.png",
+          	"128"	: "images/icon_128.png" },
+  
+  // Pick one (or none)
+  "browser_action": {
+	"default_icon": "images/icon_48.png", // optional
+	"default_title": "Projet Cayman",      // optional; shown in tooltip
+    "default_popup": "popup.html" 
+  },
+  //Permet l'execution de certains scripts
+  "permissions": [
+    "http://localhost/",
+    "http://protected-bastion-9703.herokuapp.com/",
+    "tabs","contextMenus"
+  ],
+  
+  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
+  
+  "background": {
+    "page": "background.html"
+  }
+
+}
