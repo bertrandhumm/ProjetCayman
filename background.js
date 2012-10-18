@@ -22,8 +22,10 @@ socket.on('links', function(data){
 chrome.browserAction.setBadgeText({text: " "});
 chrome.browserAction.setBadgeBackgroundColor({color: "#7FFF00"});
 
-
-
-	
-	
-	
+//Pour forcer le rafraichissement
+chrome.extension.onMessage.addListener(
+	function(message, sender, sendResponse) {
+	if ( message.cmd == "refresh") {
+		socket.emit("list");
+	}
+});

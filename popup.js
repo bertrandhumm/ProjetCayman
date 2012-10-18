@@ -92,6 +92,7 @@ $(document).ready(function(){
 	$("#login_button").click(function(event){
 		event.preventDefault();
 		localStorage.user = $("#login input").val();
+		chrome.extension.sendMessage({cmd : "refresh"});
 		$("#login").hide();
 		$("#post").show();
 		$("#liens").show();
