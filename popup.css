@@ -10,26 +10,6 @@ body
 *:focus { outline:none; }
 a { text-decoration:none; }
 .clear { clear:both; }
-.transition_all
-{
-	-webkit-transition: all 0.2s ease-in-out;
-	-moz-transition: all 0.2s ease-in-out;
-	-ms-transition: all 0.2s ease-in-out;
-	-o-transition: all 0.2s ease-in-out;
-	transition: all 0.2s ease-in-out;  
-}
-
-.transition_opacity
-{
-	
-	opacity:0;
-	transition-delay:0.5s;
-	-webkit-transition: opacity 0.2s ease-in-out;
-	-moz-transition: opacity 0.2s ease-in-out;
-	-ms-transition: opacity 0.2s ease-in-out;
-	-o-transition: opacity 0.2s ease-in-out;
-	transition: opacity 0.2s ease-in-out; 
-}
 
 
 /*//////////////////////////////////////////////////
@@ -146,13 +126,14 @@ LIENS
 	margin-right:0px;
 	float:left;
 	background:#86C12F;
+	transition: width 0.2s ease-in-out;  
+	text-align:center;
 }
 
 #liens li:hover div
 {
 	width:35px;
 	height:60px;
-	text-align:center;
 	vertical-align:middle;
 	margin-right:10px;
 }
@@ -162,12 +143,25 @@ LIENS
 	width:25px;
 	height:24px;
 	margin:5px;
+	border:0;
+	outline:none;
+	
 	background-image: url('images/like.png');
 	background-repeat:no-repeat;
 	background-size:100%;
 	background-position:0px 0px;
-	border:0;
-	outline:none;
+	
+	transition: opacity 0.2s ease-in-out 1s; 
+}
+
+#liens b
+{
+	color:#FFFFFF;
+	font-size:15px;
+	display:inline-block;
+	font-weight:normal;
+	
+	transition: opacity 0.2s ease-in-out 1s; 
 }
 
 #liens li:hover #like_button, #liens li:hover b
@@ -180,17 +174,9 @@ LIENS
 	background-position:0px -23px;
 }
 
-#liens #like_button:active
+#liens #like_button:active, #liens #like_button.liked
 {
-	background-position:0px -47px;
-}
-
-#liens b
-{
-	color:#FFFFFF;
-	font-size:15px;
-	display:inline-block;
-	font-weight:normal;
+	background-position:0px -47px !important;
 }
 
 #liens ul li a
