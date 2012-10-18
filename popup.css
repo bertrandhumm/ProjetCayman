@@ -9,6 +9,14 @@ body
 
 *:focus { outline:none; }
 a { text-decoration:none; }
+.transition
+{
+	-webkit-transition: all 0.2s ease-in-out;
+	-moz-transition: all 0.2s ease-in-out;
+	-ms-transition: all 0.2s ease-in-out;
+	-o-transition: all 0.2s ease-in-out;
+	transition: all 0.2s ease-in-out;  
+}
 
 
 /*//////////////////////////////////////////////////
@@ -107,12 +115,6 @@ LIENS
 {
 	border-left:#86C12F 0px solid;
 	margin-top:5px;
-	
-	-webkit-transition: 0.2s ease-in-out;
-	-moz-transition: 0.2s ease-in-out;
-	-ms-transition: 0.2s ease-in-out;
-	-o-transition: 0.2s ease-in-out;
-	transition: 0.2s ease-in-out;  
 	
 	border-bottom-width:3px;
 	-webkit-border-bottom-image:-webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(221,221,221,0)), color-stop(1%,rgba(221,221,221,0.02)), color-stop(49%,rgba(221,221,221,1)), color-stop(100%,rgba(221,221,221,0)));
