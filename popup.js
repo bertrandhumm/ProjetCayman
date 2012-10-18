@@ -84,7 +84,7 @@ $(document).ready(function(){
 			if(textarea != '' && textarea.length < 110 && tab[0].url.match(/http|https/gi) != null){
 				$('#send_post').removeClass("disabled").removeAttr('disabled');
 			} else {
-			$('#send_post').addClass("disabled").attr('disabled', 'disabled');
+				$('#send_post').addClass("disabled").attr('disabled', 'disabled');
 			}
 		});	
 	}
