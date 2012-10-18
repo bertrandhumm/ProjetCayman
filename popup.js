@@ -30,7 +30,6 @@ socket.on('list_group_receive', function(data){
  */
 chrome.extension.onMessage.addListener(
 	function(message, sender, sendResponse) {
-	console.log(message);
 	if ( message.cmd == "links") {
 		data = message.links;
 		chrome.browserAction.setBadgeText({text: "<-"});
@@ -65,16 +64,16 @@ $(document).ready(function(){
 	
 	//Envoi de post
 	$("#send_post").click(function(){
-		
 		chrome.browserAction.setBadgeText({text: "!"});
 		chrome.browserAction.setBadgeBackgroundColor({color: "#FFD700"});
 		chrome.tabs.query({active:true},function(tab){
 			// On vérifie le protocole de la page (Interdication de "chrome", "file" et filtrage de "https")
 			console.log(tab[0].url.substring(0,tab[0].url.search(":")));
     		socket.emit('url', { url: tab[0].url, name: tab[0].title, tab: tab[0], user : localStorage.user, comment: $("#comment").val() });
+			$('#comment').val('');
+			$('#send_post').addClass("disabled").attr('disabled', 'disabled');
 		});
-		$('#comment').val('');
-		$('#send_post').addClass("disabled").attr('disabled', 'disabled');
+		
 	});
 	
 	
