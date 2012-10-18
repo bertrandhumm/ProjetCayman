@@ -175,7 +175,7 @@ LOGIN
 	padding:10px;
 }
 
-#login h1
+#login h1, #liens h1
 {
 	display:block;
 	padding:0;
