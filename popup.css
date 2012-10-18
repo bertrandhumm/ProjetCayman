@@ -126,7 +126,7 @@ LIENS
 	margin-right:0px;
 	float:left;
 	background:#86C12F;
-	transition: width 0.2s ease-in-out;  
+	-webkit-transition: width 0.3s cubic-bezier(0.175, 0.885, 0.320, 1.275); 
 	text-align:center;
 }
 
@@ -151,7 +151,8 @@ LIENS
 	background-size:100%;
 	background-position:0px 0px;
 	
-	transition: opacity 0.2s ease-in-out 1s; 
+	opacity:0;
+	-webkit-transition: opacity 0.1s cubic-bezier(0.000, 1.115, 0.030, 0.985) 0.2s; 
 }
 
 #liens b
@@ -161,12 +162,13 @@ LIENS
 	display:inline-block;
 	font-weight:normal;
 	
-	transition: opacity 0.2s ease-in-out 1s; 
+	opacity:0;
+	-webkit-transition: opacity 0.1s cubic-bezier(0.000, 1.115, 0.030, 0.985) 0.2s; 
 }
 
 #liens li:hover #like_button, #liens li:hover b
 {
-	opacity:1
+	opacity:1;
 }
 
 #liens #like_button:hover
