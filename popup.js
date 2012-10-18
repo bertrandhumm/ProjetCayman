@@ -37,7 +37,7 @@ chrome.extension.onMessage.addListener(
 		chrome.browserAction.setBadgeText({text: "<-"});
 		$("#liens>ul").html("");
 		$(data).each(function(index, element){
-			$("#liens>ul").append("<li data-id='" + element._id + "' ><div class='transition_all'><input type='image' id='like_button' src='images/empty.png' class='transition_opacity' /><b class='transition_opacity'>" + element.url.meta.votes + "</b></div><a href='" + element.url.url + "' target='_blank' title='" + element.url.url + "'><h2>" + element.url.name + "</h2><span>"+ element.url.comment +"</span><em>" + element.user + "</em></a></li><div class='clear'></div><img src='images/border_bottom.png'>");
+			$("#liens>ul").append("<li data-id='" + element._id + "' ><div class='transition_all'><input type='image' id='like_button' src='images/empty.png' class='transition_opacity' /><b class='transition_opacity'>" + element.url.meta.votes.length + "</b></div><a href='" + element.url.url + "' target='_blank' title='" + element.url.url + "'><h2>" + element.url.name + "</h2><span>"+ element.url.comment +"</span><em>" + element.user + "</em></a></li><div class='clear'></div><img src='images/border_bottom.png'>");
 			$('b').fadeIn();
 			localStorage.liens = $("#liens>ul").html();
 			localStorage.notif = 0;
@@ -84,7 +84,6 @@ $(document).ready(function(){
 	$("#like_button").live("click", function(event){
 		event.preventDefault();
 		socket.emit('like', { id: $(this).parents("li").data("id"), user: localStorage.user });
-		chrome.extension.sendMessage({cmd : "refresh"});
 	});
 	
 	function check_textarea(){
