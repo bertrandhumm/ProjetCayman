@@ -79,6 +79,12 @@ $(document).ready(function(){
 		
 	});
 	
+	//Bouton like
+	$("#like_button").live("click", function(event){
+		event.preventDefault();
+		socket.emit('like', { id: $(this).parents("li").data("id"), user: localStorage.user });
+		chrome.extension.sendMessage({cmd : "refresh"});
+	});
 	
 	function check_textarea(){
 		chrome.tabs.query({active:true},function(tab){
@@ -99,15 +105,8 @@ $(document).ready(function(){
 		$("#login").hide();
 		$("#post").show();
 		$("#liens").show();
-	})
-	
-	//Bouton like
-	$("#like_button").click(function(event){
-		event.preventDefault();
-		//socket.emit('like', { id:  });
-		console.log($(this).parent("li").data("id"));
-		//)
-		chrome.extension.sendMessage({cmd : "refresh"});
 	});
+	
+	
 	
 });
