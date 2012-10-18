@@ -5,7 +5,6 @@ localStorage.notif = 0;
 
 //connection websocket
 var socket = io.connect('http://protected-bastion-9703.herokuapp.com');
-//var socket = io.connect("http://localhost:3001");
 socket.emit('list');
 socket.emit("list_group");
 
@@ -29,15 +28,20 @@ socket.on('list_group_receive', function(data){
  *	Liens
  *
  */
-socket.on('links', function(data){
-	chrome.browserAction.setBadgeText({text: "<-"});
-	$("#liens>ul").html("");
-	$(data).each(function(index, element){
-		$("#liens>ul").append("<a href='" + element.url.url + "' target='_blank' title='" + element.url.url + "'><li><h2>" + element.url.name + "</h2><span>"+ element.url.comment +"</span><em>" + element.user + "</em></li></a><img src='images/border_bottom.png'>");
-		localStorage.liens = $("#liens>ul").html();
-		chrome.browserAction.setBadgeText({text: " "});
-		chrome.browserAction.setBadgeBackgroundColor({color: "#7DBC29"});
-	})
+chrome.extension.onMessage.addListener(
+	function(message, sender, sendResponse) {
+	console.log(message);
+	if ( message.cmd == "links") {
+		data = message.links;
+		chrome.browserAction.setBadgeText({text: "<-"});
+		$("#liens>ul").html("");
+		$(data).each(function(index, element){
+			$("#liens>ul").append("<a href='" + element.url.url + "' target='_blank' title='" + element.url.url + "'><li><h2>" + element.url.name + "</h2><span>"+ element.url.comment +"</span><em>" + element.user + "</em></li></a><img src='images/border_bottom.png'>");
+			localStorage.liens = $("#liens>ul").html();
+			chrome.browserAction.setBadgeText({text: " "});
+			chrome.browserAction.setBadgeBackgroundColor({color: "#7DBC29"});
+		})
+	}
 });
 
 /*
@@ -45,7 +49,8 @@ socket.on('links', function(data){
  *
  */
 $(document).ready(function(){
-
+	// Désactivation Submit
+	$('#comment').keyup(check_textarea);
 	//Definition d'un utilisateur
 	if(!localStorage.user){
 		$("#liens").hide();
@@ -60,17 +65,16 @@ $(document).ready(function(){
 	
 	//Envoi de post
 	$("#send_post").click(function(){
+		
 		chrome.browserAction.setBadgeText({text: "->"});
 		chrome.browserAction.setBadgeBackgroundColor({color: "#FFD700"});
 		chrome.tabs.query({active:true},function(tab){
-    		socket.emit('url', { url: tab[0].url, name: tab[0].title, tab: tab[0], user : localStorage.user });
+    		socket.emit('url', { url: tab[0].url, name: tab[0].title, tab: tab[0], user : localStorage.user, comment: $("#comment").val() });
 		});
 		$('#comment').val('');
 		$('#send_post').addClass("disabled").attr('disabled', 'disabled');
 	});
 	
-	// Désactivation Submit
-	$('#comment').keyup(check_textarea);
 	
 	function check_textarea(){
 		var textarea = $('#comment').val();
