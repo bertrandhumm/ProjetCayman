@@ -37,9 +37,7 @@ chrome.extension.onMessage.addListener(
 		chrome.browserAction.setBadgeText({text: "<-"});
 		$("#liens>ul").html("");
 		$(data).each(function(index, element){
-			console.log(data);
-			console.log(data._id);
-			$("#liens>ul").append("<li data-id='" + data.id + "' ><div class='transition'><input type='image' id='like_button' src='images/empty.png' class='transition' /><b>" + element.url.meta.votes + "</b></div><a href='" + element.url.url + "' target='_blank' title='" + element.url.url + "'><h2>" + element.url.name + "</h2><span>"+ element.url.comment +"</span><em>" + element.user + "</em></a></li><div class='clear'></div><img src='images/border_bottom.png'>");
+			$("#liens>ul").append("<li data-id='" + element._id + "' ><div class='transition_all'><input type='image' id='like_button' src='images/empty.png' class='transition_opacity' /><b class='transition_opacity'>" + element.url.meta.votes + "</b></div><a href='" + element.url.url + "' target='_blank' title='" + element.url.url + "'><h2>" + element.url.name + "</h2><span>"+ element.url.comment +"</span><em>" + element.user + "</em></a></li><div class='clear'></div><img src='images/border_bottom.png'>");
 			$('b').fadeIn();
 			localStorage.liens = $("#liens>ul").html();
 			chrome.browserAction.setBadgeText({text: " "});
@@ -104,8 +102,11 @@ $(document).ready(function(){
 	})
 	
 	//Bouton like
-	$("#like_button").click(function(){
-		
+	$("#like_button").click(function(event){
+		event.preventDefault();
+		//socket.emit('like', { id:  });
+		console.log($(this).parent("li").data("id"));
+		//)
 		chrome.extension.sendMessage({cmd : "refresh"});
 	});
 	
