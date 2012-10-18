@@ -2,6 +2,8 @@
 var url;
 var res;
 localStorage.notif = 0;
+chrome.browserAction.setBadgeText({text: " "});
+chrome.browserAction.setBadgeBackgroundColor({color: "#7DBC29"});
 
 //connection websocket
 var socket = io.connect('http://protected-bastion-9703.herokuapp.com');
@@ -35,7 +37,9 @@ chrome.extension.onMessage.addListener(
 		chrome.browserAction.setBadgeText({text: "<-"});
 		$("#liens>ul").html("");
 		$(data).each(function(index, element){
-			$("#liens>ul").append("<li><div class='transition'><input type='image' id='like_button' src='images/empty.png' /><b>" + element.url.meta.votes + "</b></div><a href='" + element.url.url + "' target='_blank' title='" + element.url.url + "'><h2>" + element.url.name + "</h2><span>"+ element.url.comment +"</span><em>" + element.user + "</em></a></li><div class='clear'></div><img src='images/border_bottom.png'>");
+			console.log(data);
+			console.log(data._id);
+			$("#liens>ul").append("<li data-id='" + data.id + "' ><div class='transition'><input type='image' id='like_button' src='images/empty.png' class='transition' /><b>" + element.url.meta.votes + "</b></div><a href='" + element.url.url + "' target='_blank' title='" + element.url.url + "'><h2>" + element.url.name + "</h2><span>"+ element.url.comment +"</span><em>" + element.user + "</em></a></li><div class='clear'></div><img src='images/border_bottom.png'>");
 			$('b').fadeIn();
 			localStorage.liens = $("#liens>ul").html();
 			chrome.browserAction.setBadgeText({text: " "});
@@ -98,5 +102,11 @@ $(document).ready(function(){
 		$("#post").show();
 		$("#liens").show();
 	})
+	
+	//Bouton like
+	$("#like_button").click(function(){
+		
+		chrome.extension.sendMessage({cmd : "refresh"});
+	});
 	
 });
