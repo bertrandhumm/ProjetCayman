@@ -10,13 +10,25 @@ body
 *:focus { outline:none; }
 a { text-decoration:none; }
 .clear { clear:both; }
-.transition
+.transition_all
 {
 	-webkit-transition: all 0.2s ease-in-out;
 	-moz-transition: all 0.2s ease-in-out;
 	-ms-transition: all 0.2s ease-in-out;
 	-o-transition: all 0.2s ease-in-out;
 	transition: all 0.2s ease-in-out;  
+}
+
+.transition_opacity
+{
+	
+	opacity:0;
+	transition-delay:0.5s;
+	-webkit-transition: opacity 0.2s ease-in-out;
+	-moz-transition: opacity 0.2s ease-in-out;
+	-ms-transition: opacity 0.2s ease-in-out;
+	-o-transition: opacity 0.2s ease-in-out;
+	transition: opacity 0.2s ease-in-out; 
 }
 
 
@@ -156,13 +168,11 @@ LIENS
 	background-position:0px 0px;
 	border:0;
 	outline:none;
-	visibility:hidden;
-	transition-delay:0.3s;
 }
 
-#liens li:hover #like_button
+#liens li:hover #like_button, #liens li:hover b
 {
-	visibility:visible;
+	opacity:1
 }
 
 #liens #like_button:hover
