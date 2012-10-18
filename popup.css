@@ -134,7 +134,6 @@ LIENS
 	margin-right:0px;
 	float:left;
 	background:#86C12F;
-	visibility:hidden;
 }
 
 #liens li:hover div
@@ -144,10 +143,9 @@ LIENS
 	text-align:center;
 	vertical-align:middle;
 	margin-right:10px;
-	visibility:visible;
 }
 
-#liens #like_button
+#liens li #like_button
 {
 	width:25px;
 	height:24px;
@@ -158,6 +156,13 @@ LIENS
 	background-position:0px 0px;
 	border:0;
 	outline:none;
+	visibility:hidden;
+	transition-delay:0.3s;
+}
+
+#liens li:hover #like_button
+{
+	visibility:visible;
 }
 
 #liens #like_button:hover
