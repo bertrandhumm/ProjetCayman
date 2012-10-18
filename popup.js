@@ -35,7 +35,8 @@ chrome.extension.onMessage.addListener(
 		chrome.browserAction.setBadgeText({text: "<-"});
 		$("#liens>ul").html("");
 		$(data).each(function(index, element){
-			$("#liens>ul").append("<a href='" + element.url.url + "' target='_blank' title='" + element.url.url + "'><li><h2>" + element.url.name + "</h2><span>"+ element.url.comment +"</span><em>" + element.user + "</em></li></a><img src='images/border_bottom.png'>");
+			$("#liens>ul").append("<li><div class='transition'><input type='image' id='like_button' src='images/empty.png' /><b>" + element.url.meta.votes + "</b></div><a href='" + element.url.url + "' target='_blank' title='" + element.url.url + "'><h2>" + element.url.name + "</h2><span>"+ element.url.comment +"</span><em>" + element.user + "</em></a></li><div class='clear'></div><img src='images/border_bottom.png'>");
+			$('b').fadeIn();
 			localStorage.liens = $("#liens>ul").html();
 			chrome.browserAction.setBadgeText({text: " "});
 			chrome.browserAction.setBadgeBackgroundColor({color: "#7DBC29"});
@@ -80,7 +81,7 @@ $(document).ready(function(){
 	function check_textarea(){
 		chrome.tabs.query({active:true},function(tab){
 			var textarea = $('#comment').val();
-			if(textarea != '' && textarea.length < 120 && tab[0].url.match(/http|https/gi) != null){
+			if(textarea != '' && textarea.length < 110 && tab[0].url.match(/http|https/gi) != null){
 				$('#send_post').removeClass("disabled").removeAttr('disabled');
 			} else {
 			$('#send_post').addClass("disabled").attr('disabled', 'disabled');

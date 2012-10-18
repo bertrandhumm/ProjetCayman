@@ -9,6 +9,7 @@ body
 
 *:focus { outline:none; }
 a { text-decoration:none; }
+.clear { clear:both; }
 .transition
 {
 	-webkit-transition: all 0.2s ease-in-out;
@@ -65,6 +66,11 @@ POST
 	border-radius: 5px;
 }
 
+#post textarea:hover
+{
+	border:#666666 1px solid;
+}
+
 #post input, #login #login_button
 {
 	width:77px;
@@ -111,20 +117,71 @@ LIENS
 	padding:0;
 }
 
-#liens ul li 
+#liens li 
 {
 	border-left:#86C12F 0px solid;
 	margin-top:5px;
+	height:55px;
 	
 	border-bottom-width:3px;
 	-webkit-border-bottom-image:-webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(221,221,221,0)), color-stop(1%,rgba(221,221,221,0.02)), color-stop(49%,rgba(221,221,221,1)), color-stop(100%,rgba(221,221,221,0)));
-	/* border gradient */
 }
 
-#liens ul a:hover li 
+#liens li div
 {
-	border-left-width:5px;
-	padding-left:5px;
+	width:0px;
+	height:60px;
+	margin-right:0px;
+	float:left;
+	background:#86C12F;
+	visibility:hidden;
+}
+
+#liens li:hover div
+{
+	width:35px;
+	height:60px;
+	text-align:center;
+	vertical-align:middle;
+	margin-right:10px;
+	visibility:visible;
+}
+
+#liens #like_button
+{
+	width:25px;
+	height:24px;
+	margin:5px;
+	background-image: url('images/like.png');
+	background-repeat:no-repeat;
+	background-size:100%;
+	background-position:0px 0px;
+	border:0;
+	outline:none;
+}
+
+#liens #like_button:hover
+{
+	background-position:0px -23px;
+}
+
+#liens #like_button:active
+{
+	background-position:0px -47px;
+}
+
+#liens b
+{
+	color:#FFFFFF;
+	font-size:15px;
+	display:inline-block;
+	font-weight:normal;
+}
+
+#liens ul li a
+{
+	float:left;
+	width:280px;
 }
 
 #liens h2
