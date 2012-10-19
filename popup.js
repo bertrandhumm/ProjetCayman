@@ -44,8 +44,7 @@ chrome.extension.onMessage.addListener(
 		})
 	}
 	if ( message.cmd == "likes") {
-		console.log("Reception likes");
-		data = messages.likes;
+		data = message.likes;
 		$("#liens ul li").each( function(index, element){
 			if($(element).data('id') == data._id){
 				$(".transition_all b", element).html(data.likes);
@@ -94,6 +93,8 @@ $(document).ready(function(){
 		event.preventDefault();
 		socket.emit('like', { id: $(this).parents("li").data("id"), user: localStorage.user });
 		$(this).next().html(Number($(this).next().html()) +1 );
+		$(this).addClass("liked").attr('disabled', 'disabled');
+		$(this).die("click");
 	});
 	
 	function check_textarea(){
