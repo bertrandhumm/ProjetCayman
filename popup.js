@@ -2,8 +2,8 @@
 var url;
 var res;
 localStorage.notif = 0;
-chrome.browserAction.setBadgeText({text: " "});
-chrome.browserAction.setBadgeBackgroundColor({color: "#7DBC29"});
+chrome.browserAction.setBadgeText({text: ""});
+//chrome.browserAction.setBadgeBackgroundColor({color: "#7DBC29"});
 
 //connection websocket
 var socket = io.connect('http://protected-bastion-9703.herokuapp.com');
@@ -41,8 +41,7 @@ chrome.extension.onMessage.addListener(
 			$('b').fadeIn();
 			localStorage.liens = $("#liens>ul").html();
 			localStorage.notif = 0;
-			chrome.browserAction.setBadgeText({text: " "});
-			chrome.browserAction.setBadgeBackgroundColor({color: "#7DBC29"});
+			chrome.browserAction.setBadgeText({text: ""});
 		})
 	}
 });
@@ -75,6 +74,7 @@ $(document).ready(function(){
 				socket.emit('url', { url: tab[0].url, name: tab[0].title, tab: tab[0], user : localStorage.user, comment: $("#comment").val() });
 				$('#comment').val('');
 				$('#send_post').addClass("disabled").attr('disabled', 'disabled');
+				chrome.browserAction.setBadgeText({text: ""});
 			}
 		});
 		
