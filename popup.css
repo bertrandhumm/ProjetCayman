@@ -34,6 +34,7 @@ POST
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f8f8f8', endColorstr='#e6e6e6',GradientType=0 ); /* IE6-9 */
 	
 	border-bottom:1px solid #AAAAAA;
+	z-index:10;
 }
 
 #post textarea
