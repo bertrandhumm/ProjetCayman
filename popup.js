@@ -44,6 +44,7 @@ chrome.extension.onMessage.addListener(
 		})
 	}
 	if ( message.cmd == "likes") {
+		console.log("Reception likes");
 		data = messages.likes;
 		$("#liens ul li").each( function(index, element){
 			if($(element).data('id') == data._id){

@@ -17,10 +17,11 @@ socket.on('links', function(data){
 	chrome.browserAction.setBadgeText({text: localStorage.notif});
 	chrome.browserAction.setBadgeBackgroundColor({color: "#FF0000"});
 	chrome.extension.sendMessage({cmd : "links", links : data});
-})
+});
 
 //Reception de likes
-socket('updated_likes', function(data){
+socket.on('updated_likes', function(data){
+	console.log(data);
 	chrome.extension.sendMessage({cmd : "likes", likes : data});
 });
 
