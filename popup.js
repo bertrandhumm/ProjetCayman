@@ -4,6 +4,19 @@ var res;
 localStorage.notif = 0;
 chrome.browserAction.setBadgeText({text: ""});
 
+//Fonction utilitaire
+	function inArray(needle, haystack) {
+		var length = haystack.length;
+		for(var i = 0; i < length; i++) {
+			if(typeof haystack[i] == 'object') {
+				if(arrayCompare(haystack[i], needle)) return true;
+			} else {
+				if(haystack[i] == needle) return true;
+			}
+		}
+			return false;
+	}
+
 //connection websocket
 var socket = io.connect('http://protected-bastion-9703.herokuapp.com');
 chrome.extension.sendMessage({cmd : "refresh"});
@@ -36,12 +49,16 @@ chrome.extension.onMessage.addListener(
 		chrome.browserAction.setBadgeText({text: "<-"});
 		$("#liens>ul").html("");
 		$(data).each(function(index, element){
-			$("#liens>ul").append("<li data-id='" + element._id + "' ><div class='transition_all'><input type='image' id='like_button' src='images/empty.png' class='transition_opacity' /><b class='transition_opacity'>" + element.votes.length + "</b></div><a href='" + element.url + "' target='_blank' title='" + element.title + "'><h2>" + element.title + "</h2><span>"+ element.comment +"</span><em>" + element.user + "</em></a></li><div class='clear'></div><img src='images/border_bottom.png'>");
-			$('b').fadeIn();
-			localStorage.liens = $("#liens>ul").html();
-			localStorage.notif = 0;
-			chrome.browserAction.setBadgeText({text: ""});
+			var disabled = "'";
+			if( inArray(localStorage.user, element.votes) ) { 
+				disabled = " liked' disabled='disabled'";
+			}
+			$("#liens>ul").append("<li data-id='" + element._id + "' ><div class='transition_all'><input type='image' id='like_button' src='images/empty.png' class='transition_opacity"+disabled+"' /><b class='transition_opacity'>" + element.votes.length + "</b></div><a href='" + element.url + "' target='_blank' title='" + element.title + "'><h2>" + element.title + "</h2><span>"+ element.comment +"</span><em>" + element.user + "</em></a></li><div class='clear'></div><img src='images/border_bottom.png'>");
+
 		})
+		localStorage.liens = $("#liens>ul").html();
+		localStorage.notif = 0;
+		chrome.browserAction.setBadgeText({text: ""});
 	}
 	if ( message.cmd == "likes") {
 		data = message.likes;
@@ -117,7 +134,4 @@ $(document).ready(function(){
 		$("#post").show();
 		$("#liens").show();
 	});
-	
-	
-	
 });
