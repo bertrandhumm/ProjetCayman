@@ -37,7 +37,7 @@ chrome.extension.onMessage.addListener(
 		$("#liens>ul").html("");
 		$(data).each(function(index, element){
 			var disabled = "'";
-			if( jQuery.inArray(localStorage.user, element.votes) ) { 
+			if( jQuery.inArray(localStorage.user, element.votes) == 0) { 
 				disabled = " liked' disabled='disabled'";
 			}
 			$("#liens>ul").append("<li data-id='" + element._id + "' ><div class='transition_all'><input type='image' id='like_button' src='images/empty.png' class='transition_opacity"+disabled+"' /><b class='transition_opacity'>" + element.votes.length + "</b></div><a href='" + element.url + "' target='_blank' title='" + element.title + "'><h2>" + element.title + "</h2><span>"+ element.comment +"</span><em>" + element.user + "</em></a></li><div class='clear'></div><img src='images/border_bottom.png'>");
@@ -82,7 +82,6 @@ $(document).ready(function(){
 		chrome.browserAction.setBadgeBackgroundColor({color: "#FFD700"});
 		chrome.tabs.query({active:true},function(tab){
 			if(tab[0].url.match(/http|https/gi) != null){
-				console.log(tab[0]);
 				socket.emit('url', { url: tab[0].url, name: tab[0].title, user : localStorage.user, comment: $("#comment").val() });
 				$('#comment').val('');
 				$('#send_post').addClass("disabled").attr('disabled', 'disabled');
