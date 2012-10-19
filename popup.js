@@ -37,7 +37,8 @@ chrome.extension.onMessage.addListener(
 		$("#liens>ul").html("");
 		$(data).each(function(index, element){
 			var disabled = "'";
-			if( jQuery.inArray(localStorage.user, element.votes) == 0) { 
+			console.log(jQuery.inArray(localStorage.user, element.votes));
+			if( jQuery.inArray(localStorage.user, element.votes) != -1) { 
 				disabled = " liked' disabled='disabled'";
 			}
 			$("#liens>ul").append("<li data-id='" + element._id + "' ><div class='transition_all'><input type='image' id='like_button' src='images/empty.png' class='transition_opacity"+disabled+"' /><b class='transition_opacity'>" + element.votes.length + "</b></div><a href='" + element.url + "' target='_blank' title='" + element.title + "'><h2>" + element.title + "</h2><span>"+ element.comment +"</span><em>" + element.user + "</em></a></li><div class='clear'></div><img src='images/border_bottom.png'>");
@@ -94,10 +95,12 @@ $(document).ready(function(){
 	//Bouton like
 	$("#like_button").live("click", function(event){
 		event.preventDefault();
-		socket.emit('like', { id: $(this).parents("li").data("id"), user: localStorage.user });
-		$(this).next().html(Number($(this).next().html()) +1 );
-		$(this).addClass("liked").attr('disabled', 'disabled');
-		$(this).die("click");
+			if( $(this).attr("disabled") != 'disabled') {
+			socket.emit('like', { id: $(this).parents("li").data("id"), user: localStorage.user });
+			$(this).next().html(Number($(this).next().html()) +1 );
+			$(this).addClass("liked").attr('disabled', 'disabled');
+			$(this).die("click");
+		}
 	});
 	
 	function check_textarea(){
