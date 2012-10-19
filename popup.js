@@ -29,7 +29,7 @@ function start_date_updater() {
 				days = Math.floor(x);
 				var output;
 				if( days > 0) {	output = days + " jours"}else if( hours > 0) { output = hours + " heures"}else if( minutes > 0) { output = minutes + " minutes"}else if( seconds > 0) { output = seconds + " secondes"};
-				$("a .date",this).html(' il y a ' + output);
+				$("a .date",this).html('  il y a ' + output);
 			}
 		})
 	}, 1000);
