@@ -223,10 +223,10 @@ LIENS
 
 #liens em
 {
-	display:block;	
 	font-size:12px;
 	font-style:italic;
 	color:#545454;
+	display:inline-block;
 }
 
 #liens img
