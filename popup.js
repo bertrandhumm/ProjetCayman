@@ -71,7 +71,8 @@ $(document).ready(function(){
 		chrome.browserAction.setBadgeBackgroundColor({color: "#FFD700"});
 		chrome.tabs.query({active:true},function(tab){
 			if(tab[0].url.match(/http|https/gi) != null){
-				socket.emit('url', { url: tab[0].url, name: tab[0].title, tab: tab[0], user : localStorage.user, comment: $("#comment").val() });
+				console.log(tab[0]);
+				socket.emit('url', { url: tab[0].url, name: tab[0].title, user : localStorage.user, comment: $("#comment").val() });
 				$('#comment').val('');
 				$('#send_post').addClass("disabled").attr('disabled', 'disabled');
 				chrome.browserAction.setBadgeText({text: ""});
