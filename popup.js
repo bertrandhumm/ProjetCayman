@@ -7,7 +7,7 @@ chrome.browserAction.setBadgeText({text: ""});
 
 //connection websocket
 var socket = io.connect('http://protected-bastion-9703.herokuapp.com');
-socket.emit('list');
+chrome.extension.sendMessage({cmd : "refresh"});
 socket.emit("list_group");
 
 /*

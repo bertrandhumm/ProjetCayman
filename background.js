@@ -13,7 +13,6 @@ var socket = io.connect('http://protected-bastion-9703.herokuapp.com');
 
 socket.on('links', function(data){
 	localStorage.notif++;
-	console.log("lien");
 	chrome.browserAction.setBadgeText({text: localStorage.notif});
 	chrome.browserAction.setBadgeBackgroundColor({color: "#FF0000"});
 	chrome.extension.sendMessage({cmd : "links", links : data});
