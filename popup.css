@@ -186,6 +186,7 @@ LIENS
 #liens #like_button:active, #liens #like_button.liked
 {
 	background-position:0px -47px !important;
+	cursor:default;
 }
 
 #liens ul li a
