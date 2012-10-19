@@ -11,6 +11,7 @@ chrome.contextMenus.create({title:'Partlink'});
 // Badge rouge en cas de reception de nouveaux messages + Envoi des liens a popup.js
 var socket = io.connect('http://protected-bastion-9703.herokuapp.com');
 
+//Reception de liens
 socket.on('links', function(data){
 	localStorage.notif++;
 	chrome.browserAction.setBadgeText({text: localStorage.notif});
@@ -18,9 +19,10 @@ socket.on('links', function(data){
 	chrome.extension.sendMessage({cmd : "links", links : data});
 })
 
-//Pastille verte par defaut
-//chrome.browserAction.setBadgeText({text: " "});
-//chrome.browserAction.setBadgeBackgroundColor({color: "#7FFF00"});
+//Reception de likes
+socket('updated_likes', function(data){
+	chrome.extension.sendMessage({cmd : "likes", likes : data});
+});
 
 //Pour forcer le rafraichissement
 chrome.extension.onMessage.addListener(
