@@ -126,8 +126,10 @@ LIENS
 	margin-right:0px;
 	float:left;
 	background:#86C12F;
-	-webkit-transition: width 0.3s cubic-bezier(0.175, 0.885, 0.320, 1.275); 
+	-webkit-transition: all 0.3s cubic-bezier(0.175, 0.885, 0.320, 1.275); 
 	text-align:center;
+	z-index:2;
+	position:relative;
 }
 
 #liens li:hover div
@@ -153,6 +155,8 @@ LIENS
 	
 	opacity:0;
 	-webkit-transition: opacity 0.1s cubic-bezier(0.000, 1.115, 0.030, 0.985) 0.2s; 
+	z-index:1;
+	position:relative;
 }
 
 #liens b
@@ -164,6 +168,8 @@ LIENS
 	
 	opacity:0;
 	-webkit-transition: opacity 0.1s cubic-bezier(0.000, 1.115, 0.030, 0.985) 0.2s; 
+	z-index:1;
+	position:relative;
 }
 
 #liens li:hover #like_button, #liens li:hover b
@@ -185,6 +191,8 @@ LIENS
 {
 	float:left;
 	width:280px;
+	z-index:3;
+	position:relative;
 }
 
 #liens h2
