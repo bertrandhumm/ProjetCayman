@@ -28,8 +28,13 @@ function start_date_updater() {
 				x /= 24,
 				days = Math.floor(x);
 				var output;
-				if( days > 0) {	output = days + " jours"}else if( hours > 0) { output = hours + " heures"}else if( minutes > 0) { output = minutes + " minutes"}else if( seconds > 0) { output = seconds + " secondes"};
-				$("a .date",this).html('  il y a ' + output);
+				if( days > 0) {	output = days + " jours"}
+				else if( hours > 0) { output = hours + " heures"}
+				else if( minutes > 0) { output = minutes + " minutes"}
+				else if( seconds > 0) { output = seconds + " secondes"};
+				if( typeof output != 'undefined') { 
+					$("a .date",this).html(' il y  a ' + output);
+				};
 			}
 		})
 	}, 1000);
@@ -158,4 +163,10 @@ $(document).ready(function(){
 		$("#post").show();
 		$("#liens").show();
 	});
+	
+	$("a").live('click', function(event){
+		event.preventDefault();
+		socket.emit("view", {id : $(this).parents("li").data("id") });
+		chrome.tabs.create({url: $(this).attr("href")});
+	})
 });
