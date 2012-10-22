@@ -6,13 +6,17 @@ chrome.browserAction.setBadgeText({text: ""});
 
 //connection websocket
 var socket = io.connect('http://protected-bastion-9703.herokuapp.com');
+socket.on("token", function(data){
+	localStorage.token = data;
+	console.log("token: "+ data);
+});
+
 chrome.extension.sendMessage({cmd : "refresh"});
 socket.emit("list_group");
 
 
 var date_updater;
 function start_date_updater() {
-	console.log("starting date-updater");
 	date_updater = setInterval(function() {
 		$("#liens ul li").each(function(index, element){
 			post_time = $(this).data("timestamp");
@@ -31,7 +35,8 @@ function start_date_updater() {
 				if( days > 0) {	output = days + " jours"}
 				else if( hours > 0) { output = hours + " heures"}
 				else if( minutes > 0) { output = minutes + " minutes"}
-				else if( seconds > 0) { output = seconds + " secondes"};
+				else if( seconds > 0) { output = seconds + " secondes"}
+				else if( seconds < 0 ) { output = " moins d'une seconde"}
 				if( typeof output != 'undefined') { 
 					$("a .date",this).html(' il y  a ' + output);
 				};
@@ -41,7 +46,6 @@ function start_date_updater() {
 }
 
 function stop_date_updater(){
-	console.log('stop');
 	clearInterval(date_updater);
 }
 
