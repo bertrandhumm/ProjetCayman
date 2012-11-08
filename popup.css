@@ -276,7 +276,7 @@ LOGIN
 	border:0;
 }
 
-#login #user, #login select
+#login #user, #login select, #login #password
 {
 	width:100%;
 	resize: none;
@@ -310,6 +310,11 @@ LOGIN
 	outline:none;
 }
 
+.error
+{
+	color:deepred;
+	text-align:center;
+}
 
 .loading 
 {

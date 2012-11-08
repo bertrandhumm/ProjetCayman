@@ -1,20 +1,42 @@
 //Some vars
-var url;
+var url = 'http://protected-bastion-9703.herokuapp.com';
 var res;
 localStorage.notif = 0;
 chrome.browserAction.setBadgeText({text: ""});
 
 //connection websocket
-var socket = io.connect('http://protected-bastion-9703.herokuapp.com');
+var socket = io.connect(url);
+if( localStorage.token) {
+	socket.emit('route_me', {token :  localStorage.token}, function(data){
+		var ns_socket = io.connect(url + '/' + data.namespace);
+		// Une fois connecté a un groupe
+		ns_socket.on('connect',function(){
+  			console.log('joined namespace ' + data.namespace);
+  			//chrome.extension.sendMessage({room:  data.namespace});
+  			chrome.extension.sendMessage({cmd : "refresh"});
+			$("#login").hide();
+			$("#post").show();
+			$("#liens").show();	
+  		});
+	});
+}
+
+
+socket.on("socket_infos", function(data){
+	console.log(data);
+});
+
 socket.on("token", function(data){
 	localStorage.token = data;
 	console.log("token: "+ data);
 });
 
+// Refresh
 chrome.extension.sendMessage({cmd : "refresh"});
+// Liste les groupes
 socket.emit("list_group");
 
-
+// Time pour la mise a jour des messages
 var date_updater;
 function start_date_updater() {
 	date_updater = setInterval(function() {
@@ -58,11 +80,8 @@ function stop_date_updater(){
 //Liste des groupes
 socket.on('list_group_receive', function(data){
 	$('#login form select').html("");
-	$('#login form select').append("<option>" + data[0].group + "</option>");
-	for (var i = 0; i < data.length - 1; i++) {
-    	if (data[i + 1].group != data[i].group) {
-        	$('#login form select').append("<option>" + data[i].group + "</option>");
-    	}
+	for (var i = 0; i < data.length; i++) {
+        	$('#login form select').append("<option>" + data[i].name + "</option>");
 	}
 });
 
@@ -127,7 +146,7 @@ $(document).ready(function(){
 		chrome.browserAction.setBadgeBackgroundColor({color: "#FFD700"});
 		chrome.tabs.query({active:true},function(tab){
 			if(tab[0].url.match(/http|https/gi) != null){
-				socket.emit('url', { url: tab[0].url, name: tab[0].title, user : localStorage.user, comment: $("#comment").val() });
+				chrome.extension.sendMessage({cmd: "send_url", url : tab[0].url , title : tab[0].title, comment : $("#comment").val() });
 				$('#comment').val('');
 				$('#send_post').addClass("disabled").attr('disabled', 'disabled');
 				chrome.browserAction.setBadgeText({text: ""});
@@ -140,7 +159,7 @@ $(document).ready(function(){
 	$("#like_button").live("click", function(event){
 		event.preventDefault();
 			if( $(this).attr("disabled") != 'disabled') {
-			socket.emit('like', { id: $(this).parents("li").data("id"), user: localStorage.user });
+			chrome.extension.sendMessage( {cmd: "send_like", id : $(this).parents("li").data("id"), user : localStorage.user } );
 			$(this).next().html(Number($(this).next().html()) +1 );
 			$(this).addClass("liked").attr('disabled', 'disabled');
 			$(this).die("click");
@@ -158,19 +177,40 @@ $(document).ready(function(){
 		});	
 	}
 	
-	//Login
+	// Login
 	$("#login_button").click(function(event){
 		event.preventDefault();
-		localStorage.user = $("#login input").val();
-		chrome.extension.sendMessage({cmd : "refresh"});
-		$("#login").hide();
-		$("#post").show();
-		$("#liens").show();
+		localStorage.user = $("#login #user").val();
+		password = $("#login #password").val();
+		console.log("Login : "+ localStorage.user + "Password : " + password);
+		socket.emit("login", { user: localStorage.user, password: password }, function(response){
+			console.log(response);
+			if(response.error){
+				$(".error").html(response.error);
+				$("#login #user,#login #password").val("");
+			}else{
+				localStorage.token = response.ok;
+				//Join a new domain
+				socket.emit('route_me', {token :  localStorage.token}, function(data){
+					var ns_socket = io.connect(url + '/' + data.namespace);
+					// Une fois connecté a un groupe
+					ns_socket.on('connect',function(){
+  						console.log('joined namespace ' + data.namespace);
+  						chrome.extension.sendMessage({room:  data.namespace});
+  						chrome.extension.sendMessage({cmd : "refresh"});
+						$("#login").hide();
+						$("#post").show();
+						$("#liens").show();
+							
+  				});
+			});
+			}
+		});
 	});
-	
+	//Vues 
 	$("a").live('click', function(event){
 		event.preventDefault();
-		socket.emit("view", {id : $(this).parents("li").data("id") });
+		chrome.extension.sendMessage( {cmd : "send_view", id : $(this).parents("li").data("id") });
 		chrome.tabs.create({url: $(this).attr("href")});
 	})
 });
