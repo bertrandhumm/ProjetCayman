@@ -7,18 +7,10 @@ chrome.browserAction.setBadgeText({text: ""});
 //connection websocket
 var socket = io.connect(url);
 if( localStorage.token) {
-	socket.emit('route_me', {token :  localStorage.token}, function(data){
-		var ns_socket = io.connect(url + '/' + data.namespace);
-		// Une fois connecté a un groupe
-		ns_socket.on('connect',function(){
-  			console.log('joined namespace ' + data.namespace);
-  			//chrome.extension.sendMessage({room:  data.namespace});
-  			chrome.extension.sendMessage({cmd : "refresh"});
-			$("#login").hide();
-			$("#post").show();
-			$("#liens").show();	
-  		});
-	});
+  	chrome.extension.sendMessage({cmd : "refresh"});
+	$("#login").hide();
+	$("#post").show();
+	$("#liens").show();	
 }
 
 
