@@ -8,13 +8,22 @@ chrome.contextMenus.onClicked.addListener(function(info, tab){
 })
 //chrome.contextMenus.create({title:'Partlink'});
 
+//Restaure la connection précédente
+if(localStorage.url){
+	console.log("Restauration de la connection sur :"+ localStorage.url);
+	socket = io.connect(localStorage.url);
+	socket.on('connect',function(){
+  		console.log('joined namespace ' + message.room);
+  	})
+}
+
 // Pour forcer le rafraichissement
 chrome.extension.onMessage.addListener(
 	function(message, sender, sendResponse) {
-	if ( message.room ) {
+	if ( message.room && !socket ) {
 		// Badge rouge en cas de reception de nouveaux messages + Envoi des liens a popup.js
-		var url = 'http://protected-bastion-9703.herokuapp.com/' + message.room;
-		socket = io.connect(url);
+		localStorage.url = 'http://protected-bastion-9703.herokuapp.com/' + message.room;
+		socket = io.connect(localStorage.url);
 		socket.on('connect',function(){
   						console.log('joined namespace ' + message.room);
   		})
@@ -37,9 +46,11 @@ chrome.extension.onMessage.addListener(
 		socket.emit("list");
 	}
 	if ( message.cmd == "send_url" && socket ) {
+			console.log("emit URL");
 			socket.emit('url', { url: message.url, name: message.title, user : localStorage.user, comment: message.comment });
 	}
 	if ( message.cmd == "send_like" && socket ) {
+		console.log("send_like");
 		socket.emit('like', { id : message.id, user: message.user});
 	}
 	if ( message.cmd == "send_view" && socket ) {

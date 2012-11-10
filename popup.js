@@ -1,32 +1,82 @@
+$(document).ready(function(){
 //Some vars
 var url = 'http://protected-bastion-9703.herokuapp.com';
 var res;
 localStorage.notif = 0;
 chrome.browserAction.setBadgeText({text: ""});
 
-//connection websocket
-var socket = io.connect(url);
+
 if( localStorage.token) {
+	//Restaure la liste des liens s'ils sont stockés avec localStorage
+	if(localStorage.liens){
+		$("#liens>ul").html(localStorage.liens);
+	}
+	// Refresh
   	chrome.extension.sendMessage({cmd : "refresh"});
 	$("#login").hide();
 	$("#post").show();
 	$("#liens").show();	
+}else{
+	/*
+ 	*	Login
+ 	*
+ 	*/
+	var socket = io.connect(url);
+	//Toolbox connexion
+	// Liste les groupes
+	socket.emit("list_group");
+	// Reception
+	socket.on('list_group_receive', function(data){
+	$('#login form select').html("");
+	for (var i = 0; i < data.length; i++) {
+    	$('#login form select').append("<option>" + data[i].name + "</option>");
+	}
+	});
+	// Misc Infos
+	socket.on("socket_infos", function(data){
+		console.log(data);
+	});
+	socket.on("token", function(data){
+		localStorage.token = data;
+		console.log("token: "+ data);
+	});
+	
+	// Login
+	$("#login_button").click(function(event){
+		event.preventDefault();
+		localStorage.user = $("#login #user").val();
+		password = $("#login #password").val();
+		console.log("Login : "+ localStorage.user + "Password : " + password);
+		socket.emit("login", { user: localStorage.user, password: password }, function(response){
+			console.log(response);
+			if(response.error){
+				$(".error").html(response.error);
+				$("#login #user,#login #password").val("");
+			}else{
+				localStorage.token = response.ok;
+				//Join a new domain
+				socket.emit('route_me', {token :  localStorage.token}, function(data){
+					var ns_socket = io.connect(url + '/' + data.namespace);
+					// Une fois connecté a un groupe
+					ns_socket.on('connect',function(){
+  						console.log('joined namespace ' + data.namespace);
+  						chrome.extension.sendMessage({room:  data.namespace});
+  						chrome.extension.sendMessage({cmd : "refresh"});
+						$("#login").hide();
+						$("#post").show();
+						$("#liens").show();
+							
+  				});
+			});
+			}
+		});
+	});
 }
 
-
-socket.on("socket_infos", function(data){
-	console.log(data);
-});
-
-socket.on("token", function(data){
-	localStorage.token = data;
-	console.log("token: "+ data);
-});
-
-// Refresh
-chrome.extension.sendMessage({cmd : "refresh"});
-// Liste les groupes
-socket.emit("list_group");
+/*
+ *	Temps des message en live
+ *
+ */
 
 // Time pour la mise a jour des messages
 var date_updater;
@@ -63,22 +113,8 @@ function stop_date_updater(){
 	clearInterval(date_updater);
 }
 
-
 /*
- *	Login
- *
- */
- 
-//Liste des groupes
-socket.on('list_group_receive', function(data){
-	$('#login form select').html("");
-	for (var i = 0; i < data.length; i++) {
-        	$('#login form select').append("<option>" + data[i].name + "</option>");
-	}
-});
-
-/*
- *	Liens
+ *	Listener Chrome pour les messages de Background.js
  *
  */
 chrome.extension.onMessage.addListener(
@@ -113,25 +149,10 @@ chrome.extension.onMessage.addListener(
 	}	
 });
 
-/*
- *	Action sur le document nécessitant jQuery
- *
- */
-$(document).ready(function(){
+
 	// Désactivation Submit
 	$('#comment').keyup(check_textarea);
-	//Definition d'un utilisateur
-	if(!localStorage.user){
-		$("#liens").hide();
-		$("#post").hide();
-		$("#login").show();
-	}
-
-	//Restaure la liste des liens s'ils sont stockés avec localStorage
-	if(localStorage.liens){
-		$("#liens>ul").html(localStorage.liens);
-	}
-	
+		
 	//Envoi de post
 	$("#send_post").click(function(){
 		chrome.browserAction.setBadgeText({text: "!"});
@@ -158,6 +179,7 @@ $(document).ready(function(){
 		}
 	});
 	
+	// Vérifie la validité de l'URL a envoyer
 	function check_textarea(){
 		chrome.tabs.query({active:true},function(tab){
 			var textarea = $('#comment').val();
@@ -169,36 +191,7 @@ $(document).ready(function(){
 		});	
 	}
 	
-	// Login
-	$("#login_button").click(function(event){
-		event.preventDefault();
-		localStorage.user = $("#login #user").val();
-		password = $("#login #password").val();
-		console.log("Login : "+ localStorage.user + "Password : " + password);
-		socket.emit("login", { user: localStorage.user, password: password }, function(response){
-			console.log(response);
-			if(response.error){
-				$(".error").html(response.error);
-				$("#login #user,#login #password").val("");
-			}else{
-				localStorage.token = response.ok;
-				//Join a new domain
-				socket.emit('route_me', {token :  localStorage.token}, function(data){
-					var ns_socket = io.connect(url + '/' + data.namespace);
-					// Une fois connecté a un groupe
-					ns_socket.on('connect',function(){
-  						console.log('joined namespace ' + data.namespace);
-  						chrome.extension.sendMessage({room:  data.namespace});
-  						chrome.extension.sendMessage({cmd : "refresh"});
-						$("#login").hide();
-						$("#post").show();
-						$("#liens").show();
-							
-  				});
-			});
-			}
-		});
-	});
+	
 	//Vues 
 	$("a").live('click', function(event){
 		event.preventDefault();
