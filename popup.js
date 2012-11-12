@@ -14,13 +14,14 @@ if( localStorage.token) {
 	// Refresh
   	chrome.extension.sendMessage({cmd : "refresh"});
 	$("#login").hide();
-	$("#post").show();
-	$("#liens").show();	
+	$("#post,#liens").show();	
 }else{
 	/*
  	*	Login
  	*
  	*/
+ 	$("#login").show();
+	$("#post,#liens").hide();
 	var socket = io.connect(url);
 	//Toolbox connexion
 	// Liste les groupes
