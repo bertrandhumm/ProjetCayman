@@ -23,9 +23,6 @@
             <fieldset>
                 <input type="text" name="user" id="user" placeholder="Identifiant" autofocus/>
                 <input type="password" name="password" id="password" placeholder="Mot de passe" />
-                <select>
-                    <option value="none">Retrieving list</option>
-                </select>
             </fieldset>
           <input type="image" id="login_button" src="images/empty.png" />
           <div style="clear:both"></div>
@@ -34,7 +31,16 @@
     </div>
     
     <div id="liens">
-        <ul>
+        <ul id='menu_tabs'>
+        	<li>
+        		Tab 1
+        	</li>
+        	<li>
+        		Tab 2
+        	</li>
+        </ul>
+        
+        <ul id="disp">
             <li class="loading">
                 <h1>Connecting with Houston, Texas</h1>
             </li>

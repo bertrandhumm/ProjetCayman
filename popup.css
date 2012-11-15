@@ -320,3 +320,23 @@ LOGIN
 {
 	border-bottom:none !important;
 }
+
+#menu_tabs
+{
+	padding:0;	
+}
+
+#menu_tabs li
+{
+	display: inline-block;
+	margin-right: 25px;
+	border-top:1px solid grey;
+	border-left:1px solid grey;
+	border-right:1px solid grey;
+	height:30px;
+}
+
+#menu_tabs .active
+{
+	background-color:red;
+}

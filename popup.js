@@ -5,6 +5,12 @@ var res;
 localStorage.notif = 0;
 chrome.browserAction.setBadgeText({text: ""});
 
+$("#menu_tabs li").click(function(){ 
+	if(!$(this).hasClass("active")){
+		$("#menu_tabs li").removeClass("active");
+		$(this).addClass("active");
+	}
+});
 
 if( localStorage.token) {
 	//Restaure la liste des liens s'ils sont stockés avec localStorage
@@ -124,13 +130,13 @@ chrome.extension.onMessage.addListener(
 		data = message.links;
 		chrome.browserAction.setBadgeText({text: "<-"});
 		stop_date_updater();
-		$("#liens>ul").html("");
+		$("#liens>#disp").html("");
 		$(data).each(function(index, element){
 			var disabled = "'";
 			if( jQuery.inArray(localStorage.user, element.votes) != -1) { 
 				disabled = " liked' disabled='disabled'";
 			}
-			$("#liens>ul").append("<li data-id='" + element._id + "' data-timestamp='"+ element.timestamp +"' ><div class='transition_all'><input type='image' id='like_button' src='images/empty.png' class='transition_opacity"+disabled+"' /><b class='transition_opacity'>" + element.votes.length + "</b></div><a href='" + element.url + "' target='_blank' title='" + element.title + "'><h2>" + element.title + "</h2><span>"+ element.comment +"</span><em>" + element.user + "</em><em class='date'></em></a></li><div class='clear'></div><img src='images/border_bottom.png'>");
+			$("#liens>#disp").append("<li data-id='" + element._id + "' data-timestamp='"+ element.timestamp +"' ><div class='transition_all'><input type='image' id='like_button' src='images/empty.png' class='transition_opacity"+disabled+"' /><b class='transition_opacity'>" + element.votes.length + "</b></div><a href='" + element.url + "' target='_blank' title='" + element.title + "'><h2>" + element.title + "</h2><span>"+ element.comment +"</span><em>" + element.user + "</em><em class='date'></em></a></li><div class='clear'></div><img src='images/border_bottom.png'>");
 			mnt = new Date();
 			post = Date.parse(element.timestamp);
 		
