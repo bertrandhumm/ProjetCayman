@@ -5,9 +5,12 @@ var res;
 localStorage.notif = 0;
 chrome.browserAction.setBadgeText({text: ""});
 
-$("#menu_tabs li").click(function(){ 
+$("#menu_tabs > li").live('click',function(){
 	if(!$(this).hasClass("active")){
 		$("#menu_tabs li").removeClass("active");
+		$("#disp div").hide();
+		toShow = "#"+$(this).data("namespace");
+		$(toShow).show();
 		$(this).addClass("active");
 	}
 });
@@ -15,7 +18,7 @@ $("#menu_tabs li").click(function(){
 if( localStorage.token) {
 	//Restaure la liste des liens s'ils sont stockés avec localStorage
 	if(localStorage.liens){
-		$("#liens>ul").html(localStorage.liens);
+		$("#liens").html(localStorage.liens);
 	}
 	// Refresh
   	chrome.extension.sendMessage({cmd : "refresh"});
@@ -63,17 +66,18 @@ if( localStorage.token) {
 				localStorage.token = response.ok;
 				//Join a new domain
 				socket.emit('route_me', {token :  localStorage.token}, function(data){
-					var ns_socket = io.connect(url + '/' + data.namespace);
-					// Une fois connecté a un groupe
-					ns_socket.on('connect',function(){
-  						console.log('joined namespace ' + data.namespace);
-  						chrome.extension.sendMessage({room:  data.namespace});
-  						chrome.extension.sendMessage({cmd : "refresh"});
-						$("#login").hide();
-						$("#post").show();
-						$("#liens").show();
-							
-  				});
+					console.log(data);
+					$(data).each(function(index,element){
+						$("#menu_tabs").append("<li data-namespace="+ element.namespace +">" + element.name + "</li>")
+					});
+					//CSS adjustment
+					unit = 100/data.length;
+					$("#menu_tabs > li:first-child").addClass("active");
+					chrome.extension.sendMessage({room:  data});
+  					chrome.extension.sendMessage({cmd : "refresh"});
+					$("#login").hide();
+					$("#post").show();
+					$("#liens").show();		
 			});
 			}
 		});
@@ -131,20 +135,25 @@ chrome.extension.onMessage.addListener(
 		chrome.browserAction.setBadgeText({text: "<-"});
 		stop_date_updater();
 		$("#liens>#disp").html("");
-		$(data).each(function(index, element){
+		var divId = "#" + message.tab;
+		console.log(message);
+		if($(divId).length == 0) {
+		$("#liens>#disp").html("<div id="+ message.tab+"></div>");
+		$(message.links).each(function(index, element){
 			var disabled = "'";
 			if( jQuery.inArray(localStorage.user, element.votes) != -1) { 
 				disabled = " liked' disabled='disabled'";
 			}
-			$("#liens>#disp").append("<li data-id='" + element._id + "' data-timestamp='"+ element.timestamp +"' ><div class='transition_all'><input type='image' id='like_button' src='images/empty.png' class='transition_opacity"+disabled+"' /><b class='transition_opacity'>" + element.votes.length + "</b></div><a href='" + element.url + "' target='_blank' title='" + element.title + "'><h2>" + element.title + "</h2><span>"+ element.comment +"</span><em>" + element.user + "</em><em class='date'></em></a></li><div class='clear'></div><img src='images/border_bottom.png'>");
+			$(divId).append("<li data-id='" + element._id + "' data-timestamp='"+ element.timestamp +"' ><div class='transition_all'><input type='image' id='like_button' src='images/empty.png' class='transition_opacity"+disabled+"' /><b class='transition_opacity'>" + element.votes.length + "</b></div><a href='" + element.url + "' target='_blank' title='" + element.title + "'><h2>" + element.title + "</h2><span>"+ element.comment +"</span><em>" + element.user + "</em><em class='date'></em></a></li><div class='clear'></div><img src='images/border_bottom.png'>");
 			mnt = new Date();
 			post = Date.parse(element.timestamp);
 		
 		})
-		localStorage.liens = $("#liens>ul").html();
+		localStorage.liens = $("#liens").html();
 		localStorage.notif = 0;
 		chrome.browserAction.setBadgeText({text: ""});
 		start_date_updater();
+		}
 	}
 	if ( message.cmd == "likes") {
 		data = message.likes;
@@ -166,7 +175,7 @@ chrome.extension.onMessage.addListener(
 		chrome.browserAction.setBadgeBackgroundColor({color: "#FFD700"});
 		chrome.tabs.query({active:true},function(tab){
 			if(tab[0].url.match(/http|https/gi) != null){
-				chrome.extension.sendMessage({cmd: "send_url", url : tab[0].url , title : tab[0].title, comment : $("#comment").val() });
+				chrome.extension.sendMessage({cmd: "send_url", url : tab[0].url , title : tab[0].title, comment : $("#comment").val(), namespace: $("#menu_tabs .active").data("namespace") });
 				$('#comment').val('');
 				$('#send_post').addClass("disabled").attr('disabled', 'disabled');
 				chrome.browserAction.setBadgeText({text: ""});
