@@ -52,7 +52,9 @@ chrome.extension.onMessage.addListener(
 	}
 	if ( message.cmd == "refresh" && socket.length != {}  ) {
 		console.log("ENVOI");
-		socket["508d76353438bc0008000002"].emit("list");
+		for(var room in socket ){
+			socket[room].emit("list");
+		};
 	}
 	if ( message.cmd == "send_url" && socket != {} ) {
 			console.log("emit URL");

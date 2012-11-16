@@ -134,11 +134,13 @@ chrome.extension.onMessage.addListener(
 		data = message.links;
 		chrome.browserAction.setBadgeText({text: "<-"});
 		stop_date_updater();
-		$("#liens>#disp").html("");
+		$(".loading").remove();
 		var divId = "#" + message.tab;
 		console.log(message);
 		if($(divId).length == 0) {
-		$("#liens>#disp").html("<div id="+ message.tab+"></div>");
+			$("#liens>#disp").append("<div id="+ message.tab+"></div>");
+		}
+		$(divId).html("");
 		$(message.links).each(function(index, element){
 			var disabled = "'";
 			if( jQuery.inArray(localStorage.user, element.votes) != -1) { 
@@ -149,11 +151,11 @@ chrome.extension.onMessage.addListener(
 			post = Date.parse(element.timestamp);
 		
 		})
-		localStorage.liens = $("#liens").html();
+		
 		localStorage.notif = 0;
 		chrome.browserAction.setBadgeText({text: ""});
 		start_date_updater();
-		}
+		//localStorage.liens = $("#liens").html();
 	}
 	if ( message.cmd == "likes") {
 		data = message.likes;
