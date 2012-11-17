@@ -57,7 +57,7 @@ chrome.extension.onMessage.addListener(
 		};
 	}
 	if ( message.cmd == "send_url" && socket != {} ) {
-			console.log("emit URL");
+			console.log("emit URL" + message.title);
 			console.log(message.namespace);
 			socket[message.namespace].emit('url', { url: message.url, name: message.title, user : localStorage.user, comment: message.comment });
 	}

@@ -6,12 +6,12 @@ localStorage.notif = 0;
 chrome.browserAction.setBadgeText({text: ""});
 
 $("#menu_tabs > li").live('click',function(){
-	if(!$(this).hasClass("active")){
-		$("#menu_tabs li").removeClass("active");
+	if(!$(this).hasClass("active_tab")){
+		$("#menu_tabs li").removeClass("active_tab");
 		$("#disp div").hide();
 		toShow = "#"+$(this).data("namespace");
 		$(toShow).show();
-		$(this).addClass("active");
+		$(this).addClass("active_tab");
 	}
 });
 
@@ -72,7 +72,7 @@ if( localStorage.token) {
 					});
 					//CSS adjustment
 					unit = 100/data.length;
-					$("#menu_tabs > li:first-child").addClass("active");
+					$("#menu_tabs > li:first-child").addClass("active_tab");
 					chrome.extension.sendMessage({room:  data});
   					chrome.extension.sendMessage({cmd : "refresh"});
 					$("#login").hide();
@@ -149,13 +149,12 @@ chrome.extension.onMessage.addListener(
 			$(divId).append("<li data-id='" + element._id + "' data-timestamp='"+ element.timestamp +"' ><div class='transition_all'><input type='image' id='like_button' src='images/empty.png' class='transition_opacity"+disabled+"' /><b class='transition_opacity'>" + element.votes.length + "</b></div><a href='" + element.url + "' target='_blank' title='" + element.title + "'><h2>" + element.title + "</h2><span>"+ element.comment +"</span><em>" + element.user + "</em><em class='date'></em></a></li><div class='clear'></div><img src='images/border_bottom.png'>");
 			mnt = new Date();
 			post = Date.parse(element.timestamp);
-		
 		})
 		
 		localStorage.notif = 0;
 		chrome.browserAction.setBadgeText({text: ""});
 		start_date_updater();
-		//localStorage.liens = $("#liens").html();
+		localStorage.liens = $("#liens").html();
 	}
 	if ( message.cmd == "likes") {
 		data = message.likes;
@@ -175,9 +174,9 @@ chrome.extension.onMessage.addListener(
 	$("#send_post").click(function(){
 		chrome.browserAction.setBadgeText({text: "!"});
 		chrome.browserAction.setBadgeBackgroundColor({color: "#FFD700"});
-		chrome.tabs.query({active:true},function(tab){
-			if(tab[0].url.match(/http|https/gi) != null){
-				chrome.extension.sendMessage({cmd: "send_url", url : tab[0].url , title : tab[0].title, comment : $("#comment").val(), namespace: $("#menu_tabs .active").data("namespace") });
+		chrome.tabs.getSelected(function(tab){
+			if(tab.url.match(/http|https/gi) != null){
+				chrome.extension.sendMessage({cmd: "send_url", url : tab.url , title : tab.title, comment : $("#comment").val(), namespace: $("#menu_tabs .active_tab").data("namespace") });
 				$('#comment').val('');
 				$('#send_post').addClass("disabled").attr('disabled', 'disabled');
 				chrome.browserAction.setBadgeText({text: ""});
@@ -199,9 +198,9 @@ chrome.extension.onMessage.addListener(
 	
 	// Vérifie la validité de l'URL a envoyer
 	function check_textarea(){
-		chrome.tabs.query({active:true},function(tab){
+		chrome.tabs.getSelected(function(tab){
 			var textarea = $('#comment').val();
-			if(textarea != '' && textarea.length < 110 && tab[0].url.match(/http|https/gi) != null){
+			if(textarea != '' && textarea.length < 110 && tab.url.match(/http|https/gi) != null){
 				$('#send_post').removeClass("disabled").removeAttr('disabled');
 			} else {
 				$('#send_post').addClass("disabled").attr('disabled', 'disabled');
