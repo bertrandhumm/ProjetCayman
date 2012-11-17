@@ -63,10 +63,10 @@ chrome.extension.onMessage.addListener(
 	}
 	if ( message.cmd == "send_like" && socket != {}) {
 		console.log("send_like");
-		socket["508d76353438bc0008000002"].emit('like', { id : message.id, user: message.user});
+		socket[message.namespace].emit('like', { id : message.id, user: message.user});
 	}
 	if ( message.cmd == "send_view" && socket != {}) {
-		socket["508d76353438bc0008000002"].emit('view', {id : message.id});
+		socket[message.namespace].emit('view', {id : message.id});
 	}
 	
 });

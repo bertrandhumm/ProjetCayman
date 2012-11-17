@@ -189,7 +189,7 @@ chrome.extension.onMessage.addListener(
 	$("#like_button").live("click", function(event){
 		event.preventDefault();
 			if( $(this).attr("disabled") != 'disabled') {
-			chrome.extension.sendMessage( {cmd: "send_like", id : $(this).parents("li").data("id"), user : localStorage.user } );
+			chrome.extension.sendMessage( {cmd: "send_like", id : $(this).parents("li").data("id"), user : localStorage.user, namespace: $("#menu_tabs .active_tab").data("namespace") } );
 			$(this).next().html(Number($(this).next().html()) +1 );
 			$(this).addClass("liked").attr('disabled', 'disabled');
 			$(this).die("click");
@@ -212,7 +212,7 @@ chrome.extension.onMessage.addListener(
 	//Vues 
 	$("a").live('click', function(event){
 		event.preventDefault();
-		chrome.extension.sendMessage( {cmd : "send_view", id : $(this).parents("li").data("id") });
+		chrome.extension.sendMessage( {cmd : "send_view", id : $(this).parents("li").data("id"), namespace: $("#menu_tabs .active_tab").data("namespace") });
 		chrome.tabs.create({url: $(this).attr("href")});
 	})
 });
