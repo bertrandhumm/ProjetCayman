@@ -333,7 +333,8 @@ LOGIN
 	border-top:1px solid grey;
 	border-left:1px solid grey;
 	border-right:1px solid grey;
-	height:30px;
+	height:20px;
+	padding: 3px 4px 0px 4px;
 }
 
 #menu_tabs .active
