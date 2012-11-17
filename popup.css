@@ -5,12 +5,11 @@ body
 	padding:0;
 	overflow-y: hidden;
 	font-family:"Myriad Pro", "Century Gothic", Calibri, Arial;
-	overflow: hidden;
 }
 
 //Cache la scrollbar
 ::-webkit-scrollbar {
-    width: 0px; //Do not know actual width, but I assume you do
+    width: 0 !important;
 }
 
 *:focus { outline:none; }
